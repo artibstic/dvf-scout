@@ -32,52 +32,124 @@ st.set_page_config(page_title="DVF Scout", page_icon="🏠", layout="wide", init
 st.markdown(
     """
     <style>
-    .block-container {max-width: 1280px; padding-top: 1.8rem; padding-bottom: 4rem;}
-    [data-testid="stHeader"] {background: rgba(255,255,255,0.88); backdrop-filter: blur(8px);}
+    :root { color-scheme: light !important; }
+    html, body { background: #f4f7fa !important; }
+    [data-testid="stAppViewContainer"], [data-testid="stMain"] {
+        background: #f4f7fa !important;
+        color: #172033 !important;
+    }
+    [data-testid="stHeader"] {
+        background: rgba(244,247,250,.96) !important;
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid #e5eaf0;
+    }
+    [data-testid="stToolbar"] { color: #44546a !important; }
+    .block-container { max-width: 1120px; padding-top: 1.35rem; padding-bottom: 4rem; }
+
+    /* Typographie : contraste fixe, quel que soit le thème système */
+    [data-testid="stMarkdownContainer"],
+    [data-testid="stMarkdownContainer"] p,
+    [data-testid="stMarkdownContainer"] li,
+    [data-testid="stMarkdownContainer"] h1,
+    [data-testid="stMarkdownContainer"] h2,
+    [data-testid="stMarkdownContainer"] h3,
+    [data-testid="stMarkdownContainer"] h4,
+    label, .stCaption { color: #172033 !important; }
+
+    /* Hero */
     .hero {
         padding: 1.65rem 1.8rem;
-        border: 1px solid rgba(49, 73, 102, 0.14);
         border-radius: 22px;
-        background: linear-gradient(135deg, rgba(245,248,252,0.98), rgba(237,244,249,0.92));
-        box-shadow: 0 10px 32px rgba(28, 44, 64, 0.06);
-        margin-bottom: 1.2rem;
+        background: linear-gradient(135deg, #183b56 0%, #255d72 100%);
+        box-shadow: 0 12px 32px rgba(20, 45, 63, .14);
+        margin-bottom: 1.15rem;
     }
-    .hero-kicker {font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; font-weight: 700; opacity: .58;}
-    .hero-title {font-size: 2.25rem; line-height: 1.05; font-weight: 760; margin: .25rem 0 .35rem 0;}
-    .hero-sub {font-size: 1.02rem; opacity: .72; max-width: 820px;}
-    .section-title {font-size: 1.45rem; font-weight: 720; margin-top: 1.8rem; margin-bottom: .25rem;}
-    .section-sub {font-size: .92rem; opacity: .66; margin-bottom: .9rem;}
-    .soft-card {
-        border: 1px solid rgba(49, 73, 102, 0.12);
-        border-radius: 18px;
-        padding: 1rem 1.1rem;
-        background: rgba(250,252,254,0.92);
+    .hero, .hero * { color: #ffffff !important; }
+    .hero-kicker { font-size:.76rem; text-transform:uppercase; letter-spacing:.12em; font-weight:750; opacity:.78; }
+    .hero-title { font-size:2.25rem; line-height:1.05; font-weight:780; margin:.28rem 0 .4rem; }
+    .hero-sub { font-size:1rem; line-height:1.55; opacity:.9; max-width:850px; }
+    .hero-badges { margin-top:.85rem; display:flex; gap:.45rem; flex-wrap:wrap; }
+    .hero-badge { border:1px solid rgba(255,255,255,.27); background:rgba(255,255,255,.10); border-radius:999px; padding:.28rem .65rem; font-size:.76rem; }
+
+    /* Panneaux */
+    [data-testid="stVerticalBlockBorderWrapper"] {
+        background:#ffffff !important;
+        border-color:#dde4eb !important;
+        border-radius:18px !important;
+        box-shadow:0 7px 20px rgba(25, 48, 67, .045);
     }
+    .section-title { color:#172033 !important; font-size:1.42rem; font-weight:760; margin-top:2rem; margin-bottom:.22rem; }
+    .section-sub { color:#66758a !important; font-size:.92rem; line-height:1.5; margin-bottom:.9rem; }
+    .result-eyebrow { color:#2a6b7f !important; font-size:.76rem; font-weight:800; text-transform:uppercase; letter-spacing:.1em; margin-top:1.8rem; }
+
+    /* Champs : toujours clairs et lisibles */
+    input, textarea { color:#172033 !important; caret-color:#172033 !important; }
+    [data-baseweb="input"] > div,
+    [data-baseweb="select"] > div,
+    [data-testid="stNumberInput"] > div > div,
+    textarea { background:#ffffff !important; border-color:#cfd8e3 !important; }
+    [data-baseweb="select"] span, [data-baseweb="input"] span { color:#172033 !important; }
+    [data-baseweb="popover"] { color:#172033 !important; }
+
+    /* Boutons : on remplace le rouge Streamlit */
+    .stButton > button[kind="primary"] {
+        background:#21617a !important; border:1px solid #21617a !important; color:white !important;
+        border-radius:12px !important; min-height:48px; font-weight:750; box-shadow:none !important;
+    }
+    .stButton > button[kind="primary"] *, .stButton > button[kind="primary"] p { color:white !important; }
+    .stButton > button[kind="primary"]:hover { background:#194e63 !important; border-color:#194e63 !important; }
+    .stDownloadButton > button { background:white !important; color:#233348 !important; border:1px solid #cfd8e3 !important; border-radius:12px !important; }
+    .stDownloadButton > button * { color:#233348 !important; }
+
+    /* KPI custom */
+    .kpi-card {
+        background:#ffffff; border:1px solid #dce4eb; border-radius:17px; padding:1rem 1.05rem;
+        min-height:124px; box-shadow:0 6px 18px rgba(25,48,67,.045);
+    }
+    .kpi-label { color:#66758a !important; font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.045em; margin-bottom:.45rem; }
+    .kpi-value { color:#13263a !important; font-size:1.55rem; line-height:1.12; font-weight:800; }
+    .kpi-sub { color:#7a8798 !important; font-size:.78rem; line-height:1.35; margin-top:.42rem; }
+    .kpi-accent { border-top:4px solid #2a6b7f; }
+
+    /* st.metric encore utilisé plus bas */
     div[data-testid="stMetric"] {
-        border: 1px solid rgba(49, 73, 102, 0.12);
-        border-radius: 17px;
-        padding: .95rem 1rem;
-        background: rgba(250,252,254,0.95);
-        min-height: 116px;
-        box-shadow: 0 6px 18px rgba(28, 44, 64, 0.035);
+        background:#ffffff !important; border:1px solid #dce4eb !important; border-radius:15px; padding:.85rem .95rem;
+        box-shadow:none; min-height:102px;
     }
-    div[data-testid="stMetricLabel"] {font-size: .83rem; opacity: .68;}
-    div[data-testid="stMetricValue"] {font-size: 1.55rem;}
-    .dpe-wrap {display:flex; gap:18px; align-items:center; flex-wrap:wrap;}
-    .dpe-badge {
-        width: 66px; height: 66px; border-radius: 16px; display:flex; align-items:center; justify-content:center;
-        color:#fff; font-size: 2rem; font-weight:800; box-shadow:0 8px 20px rgba(0,0,0,.10);
-    }
-    .dpe-A {background:#178b52;} .dpe-B {background:#55a944;} .dpe-C {background:#b2bc31;}
-    .dpe-D {background:#e4b62d;} .dpe-E {background:#e58a2e;} .dpe-F {background:#d85a35;} .dpe-G {background:#a83c34;}
-    .dpe-ND {background:#6b7280;}
+    div[data-testid="stMetric"] * { color:#172033 !important; }
+    div[data-testid="stMetricLabel"] { color:#69788b !important; font-size:.8rem !important; }
+    div[data-testid="stMetricValue"] { color:#13263a !important; font-size:1.4rem !important; }
+    div[data-testid="stMetricDelta"] { color:#607186 !important; }
+
+    /* Cartes et synthèse */
     .takeaway {
-        border-left: 4px solid #55708b; padding: .55rem .8rem; margin: .4rem 0; background: rgba(245,248,251,.82); border-radius: 0 10px 10px 0;
+        border:1px solid #dfe6ed; border-left:4px solid #2a6b7f; padding:.75rem .9rem; margin:.48rem 0;
+        background:#ffffff; border-radius:0 12px 12px 0; color:#26364a !important; line-height:1.45;
     }
-    .tiny-note {font-size:.82rem; opacity:.68;}
-    .muted-chip {display:inline-block; border:1px solid rgba(49,73,102,.15); border-radius:999px; padding:.24rem .6rem; margin:.1rem .2rem .1rem 0; font-size:.78rem; background:#f7f9fb;}
-    .stButton > button[kind="primary"] {border-radius: 12px; min-height: 46px; font-weight: 700;}
-    .stDownloadButton > button {border-radius: 12px;}
+    .muted-chip { display:inline-block; color:#526277 !important; border:1px solid #d8e0e8; border-radius:999px; padding:.28rem .62rem; margin:.12rem .22rem .12rem 0; font-size:.76rem; background:#ffffff; }
+    .empty-card { background:#ffffff; border:1px solid #dfe6ed; border-radius:16px; padding:1rem; min-height:118px; }
+    .empty-card-title { color:#215f78 !important; font-weight:760; margin-bottom:.35rem; }
+    .empty-card-text { color:#64748b !important; font-size:.88rem; line-height:1.45; }
+
+    /* DPE */
+    .dpe-panel { background:#ffffff; border:1px solid #dfe6ed; border-radius:17px; padding:1rem 1.1rem; }
+    .dpe-badge { width:66px; height:66px; border-radius:16px; display:flex; align-items:center; justify-content:center; color:#fff !important; font-size:2rem; font-weight:850; box-shadow:0 8px 20px rgba(0,0,0,.10); }
+    .dpe-badge * { color:#fff !important; }
+    .dpe-A {background:#178b52;} .dpe-B {background:#55a944;} .dpe-C {background:#a8b631;}
+    .dpe-D {background:#d6a925;} .dpe-E {background:#d97f28;} .dpe-F {background:#c95031;} .dpe-G {background:#98362f;} .dpe-ND {background:#6b7280;}
+
+    /* Alerts / expanders */
+    [data-testid="stAlert"] { border-radius:12px !important; }
+    details { background:#ffffff !important; border-color:#dfe6ed !important; border-radius:12px !important; }
+    details summary, details summary * { color:#25364a !important; }
+
+    /* Mobile */
+    @media (max-width: 760px) {
+        .block-container { padding-left:1rem; padding-right:1rem; }
+        .hero { padding:1.25rem 1.2rem; border-radius:18px; }
+        .hero-title { font-size:1.9rem; }
+        .kpi-card { min-height:auto; }
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -115,6 +187,26 @@ def dpe_badge(letter: str) -> str:
     return f'<div class="dpe-badge dpe-{cls}">{html.escape(label)}</div>'
 
 
+def kpi_card(label: str, value: str, sub: str = "", accent: bool = False) -> str:
+    extra = " kpi-accent" if accent else ""
+    return (
+        f'<div class="kpi-card{extra}">'
+        f'<div class="kpi-label">{html.escape(label)}</div>'
+        f'<div class="kpi-value">{html.escape(value)}</div>'
+        f'<div class="kpi-sub">{html.escape(sub)}</div>'
+        '</div>'
+    )
+
+
+def empty_card(title: str, text: str) -> str:
+    return (
+        '<div class="empty-card">'
+        f'<div class="empty-card-title">{html.escape(title)}</div>'
+        f'<div class="empty-card-text">{html.escape(text)}</div>'
+        '</div>'
+    )
+
+
 def copy_component(text: str):
     payload = json.dumps(text)
     components.html(
@@ -138,9 +230,12 @@ def copy_component(text: str):
 st.markdown(
     """
     <div class="hero">
-      <div class="hero-kicker">Données immobilières publiques</div>
+      <div class="hero-kicker">Analyse immobilière · données publiques</div>
       <div class="hero-title">DVF Scout</div>
-      <div class="hero-sub">Analyse une adresse, sélectionne les ventes réellement comparables et construit un argumentaire lisible à partir des données DVF. Le DPE public est rapproché du bien lorsqu'il peut être identifié de façon suffisamment crédible.</div>
+      <div class="hero-sub">Une adresse, des ventes réellement comparables et un dossier lisible pour comprendre le marché local. Les données DVF font le calcul ; le DPE public enrichit l'analyse lorsqu'il peut être rapproché de façon crédible.</div>
+      <div class="hero-badges">
+        <span class="hero-badge">DVF</span><span class="hero-badge">DPE ADEME</span><span class="hero-badge">Comparables scorés</span>
+      </div>
     </div>
     """,
     unsafe_allow_html=True,
@@ -297,9 +392,12 @@ if not result:
     st.markdown('<div class="section-title">Ce que vous obtiendrez</div>', unsafe_allow_html=True)
     st.markdown('<div class="section-sub">Une seule page à faire défiler, avec l’essentiel visible immédiatement et les réglages experts rangés à part.</div>', unsafe_allow_html=True)
     p1, p2, p3 = st.columns(3)
-    p1.info("**Marché réel**\n\nVentes DVF nettoyées, même numéro, même rue et voisinage.")
-    p2.info("**DPE public**\n\nRapprochement ADEME avec niveau de confiance au lieu d'un appariement forcé.")
-    p3.info("**Argumentaire**\n\nFourchette, robustesse, références et limites clairement séparées.")
+    with p1:
+        st.markdown(empty_card("1 · Marché réel", "Ventes DVF nettoyées, avec priorité au même numéro, à la même rue puis au voisinage."), unsafe_allow_html=True)
+    with p2:
+        st.markdown(empty_card("2 · DPE public", "Rapprochement ADEME avec un niveau de confiance, sans appariement forcé."), unsafe_allow_html=True)
+    with p3:
+        st.markdown(empty_card("3 · Argumentaire", "Fourchette, robustesse, références et limites réunies dans une lecture simple."), unsafe_allow_html=True)
     st.stop()
 
 if result["signature"] != current_signature():
@@ -317,7 +415,8 @@ argument = result["argument"]
 takeaways = result["takeaways"]
 target_surface_r = result["target_surface"]
 
-st.markdown(f'<div class="section-title">{html.escape(geo.label)}</div>', unsafe_allow_html=True)
+st.markdown('<div class="result-eyebrow">Résultat de l’analyse</div>', unsafe_allow_html=True)
+st.markdown(f'<div class="section-title" style="margin-top:.25rem">{html.escape(geo.label)}</div>', unsafe_allow_html=True)
 st.markdown(
     '<span class="muted-chip">' + html.escape(result["target_type"]) + '</span>'
     + f'<span class="muted-chip">{target_surface_r:.1f} m²</span>'
@@ -326,12 +425,16 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# KPIs
+# KPIs : cartes custom pour garantir la lisibilité même si l'utilisateur est en mode sombre
 k1, k2, k3, k4 = st.columns(4)
-k1.metric("Niveau central", format_eur(estimate["prix_m2_central"], True))
-k2.metric("Valeur indicative", format_eur(estimate["valeur_centrale"]))
-k3.metric("Fourchette observée", f"{format_eur(estimate['prix_m2_bas'], True)} → {format_eur(estimate['prix_m2_haut'], True)}")
-k4.metric("Robustesse", f"{confidence['label']} · {confidence['score']}/100")
+with k1:
+    st.markdown(kpi_card("Prix de marché central", format_eur(estimate["prix_m2_central"], True), "Médiane pondérée des comparables retenus", True), unsafe_allow_html=True)
+with k2:
+    st.markdown(kpi_card("Valeur indicative", format_eur(estimate["valeur_centrale"]), f"Pour {target_surface_r:.1f} m² · avant ajustements qualitatifs"), unsafe_allow_html=True)
+with k3:
+    st.markdown(kpi_card("Fourchette observée", f"{format_eur(estimate['prix_m2_bas'], True)} – {format_eur(estimate['prix_m2_haut'], True)}", "Cœur de l'échantillon retenu"), unsafe_allow_html=True)
+with k4:
+    st.markdown(kpi_card("Confiance", f"{confidence['label']} · {confidence['score']}/100", f"{len(comps)} comparables utilisés"), unsafe_allow_html=True)
 
 st.markdown('<div class="section-title">À retenir</div>', unsafe_allow_html=True)
 for text in takeaways:
@@ -416,6 +519,7 @@ with chart_col:
         },
         labels={"surface_reelle_bati": "Surface (m²)", "prix_m2": "Prix au m² (€)", "score": "Score"},
         title="Comparables retenus",
+        template="plotly_white",
     )
     fig.add_vline(x=target_surface_r, line_dash="dash", annotation_text="Bien étudié")
     fig.update_layout(margin=dict(l=20, r=20, t=55, b=20), height=390)
@@ -427,6 +531,7 @@ with evol_col:
         yearly, x="annee", y="prix_m2", markers=True,
         labels={"annee": "Année", "prix_m2": "Médiane €/m²"},
         title="Médiane des comparables par année",
+        template="plotly_white",
     )
     fig2.update_layout(margin=dict(l=20, r=20, t=55, b=20), height=390)
     st.plotly_chart(fig2, use_container_width=True)
