@@ -27,7 +27,7 @@ from core import (
     street_summary,
 )
 
-st.set_page_config(page_title="DVF Scout", page_icon="🏠", layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Pythéas", page_icon="🧭", layout="wide", initial_sidebar_state="collapsed")
 
 st.markdown(
     """
@@ -58,18 +58,15 @@ st.markdown(
 
     /* Hero */
     .hero {
-        padding: 1.65rem 1.8rem;
-        border-radius: 22px;
+        padding: 1.35rem 1.55rem 1.25rem;
+        border-radius: 20px;
         background: linear-gradient(135deg, #183b56 0%, #255d72 100%);
-        box-shadow: 0 12px 32px rgba(20, 45, 63, .14);
-        margin-bottom: 1.15rem;
+        box-shadow: 0 10px 26px rgba(20, 45, 63, .12);
+        margin-bottom: 1.35rem;
     }
     .hero, .hero * { color: #ffffff !important; }
-    .hero-kicker { font-size:.76rem; text-transform:uppercase; letter-spacing:.12em; font-weight:750; opacity:.78; }
-    .hero-title { font-size:2.25rem; line-height:1.05; font-weight:780; margin:.28rem 0 .4rem; }
-    .hero-sub { font-size:1rem; line-height:1.55; opacity:.9; max-width:850px; }
-    .hero-badges { margin-top:.85rem; display:flex; gap:.45rem; flex-wrap:wrap; }
-    .hero-badge { border:1px solid rgba(255,255,255,.27); background:rgba(255,255,255,.10); border-radius:999px; padding:.28rem .65rem; font-size:.76rem; }
+    .hero-title { font-size:2.2rem; line-height:1.05; font-weight:800; margin:0 0 .32rem; }
+    .hero-sub { font-size:.98rem; line-height:1.45; opacity:.9; margin:0; }
 
     /* Panneaux */
     [data-testid="stVerticalBlockBorderWrapper"] {
@@ -82,14 +79,58 @@ st.markdown(
     .section-sub { color:#66758a !important; font-size:.92rem; line-height:1.5; margin-bottom:.9rem; }
     .result-eyebrow { color:#2a6b7f !important; font-size:.76rem; font-weight:800; text-transform:uppercase; letter-spacing:.1em; margin-top:1.8rem; }
 
-    /* Champs : toujours clairs et lisibles */
-    input, textarea { color:#172033 !important; caret-color:#172033 !important; }
-    [data-baseweb="input"] > div,
-    [data-baseweb="select"] > div,
-    [data-testid="stNumberInput"] > div > div,
-    textarea { background:#ffffff !important; border-color:#cfd8e3 !important; }
-    [data-baseweb="select"] span, [data-baseweb="input"] span { color:#172033 !important; }
-    [data-baseweb="popover"] { color:#172033 !important; }
+    /* Champs : fond clair + texte sombre, même si le navigateur est en mode sombre */
+    [data-testid="stTextInput"] input,
+    [data-testid="stNumberInput"] input,
+    [data-testid="stTextArea"] textarea {
+        background:#ffffff !important;
+        color:#172033 !important;
+        -webkit-text-fill-color:#172033 !important;
+        caret-color:#172033 !important;
+        border-color:#cfd8e3 !important;
+    }
+    [data-testid="stTextInput"] [data-baseweb="input"],
+    [data-testid="stNumberInput"] [data-baseweb="input"],
+    [data-testid="stTextArea"] [data-baseweb="textarea"] {
+        background:#ffffff !important;
+        color:#172033 !important;
+        border-color:#cfd8e3 !important;
+    }
+    [data-testid="stSelectbox"] [data-baseweb="select"] > div {
+        background:#ffffff !important;
+        color:#172033 !important;
+        border-color:#cfd8e3 !important;
+    }
+    [data-testid="stSelectbox"] [data-baseweb="select"] *,
+    [data-testid="stSelectbox"] span,
+    [data-testid="stSelectbox"] svg {
+        color:#172033 !important;
+        fill:#526277 !important;
+        -webkit-text-fill-color:#172033 !important;
+    }
+    [data-baseweb="popover"],
+    [data-baseweb="popover"] > div,
+    div[role="listbox"],
+    ul[role="listbox"] {
+        background:#ffffff !important;
+        color:#172033 !important;
+    }
+    div[role="option"], li[role="option"] {
+        background:#ffffff !important;
+        color:#172033 !important;
+        -webkit-text-fill-color:#172033 !important;
+    }
+    div[role="option"]:hover, li[role="option"]:hover,
+    div[role="option"][aria-selected="true"], li[role="option"][aria-selected="true"] {
+        background:#eef4f7 !important;
+        color:#172033 !important;
+    }
+    [data-testid="stNumberInput"] button {
+        background:#ffffff !important;
+        color:#526277 !important;
+        border-color:#cfd8e3 !important;
+    }
+    [data-testid="stNumberInput"] button svg { fill:#526277 !important; }
 
     /* Boutons : on remplace le rouge Streamlit */
     .stButton > button[kind="primary"] {
@@ -230,12 +271,8 @@ def copy_component(text: str):
 st.markdown(
     """
     <div class="hero">
-      <div class="hero-kicker">Analyse immobilière · données publiques</div>
-      <div class="hero-title">DVF Scout</div>
-      <div class="hero-sub">Une adresse, des ventes réellement comparables et un dossier lisible pour comprendre le marché local. Les données DVF font le calcul ; le DPE public enrichit l'analyse lorsqu'il peut être rapproché de façon crédible.</div>
-      <div class="hero-badges">
-        <span class="hero-badge">DVF</span><span class="hero-badge">DPE ADEME</span><span class="hero-badge">Comparables scorés</span>
-      </div>
+      <div class="hero-title">Pythéas</div>
+      <div class="hero-sub">Analyse DVF et DPE autour d’une adresse.</div>
     </div>
     """,
     unsafe_allow_html=True,
@@ -258,7 +295,7 @@ with st.container(border=True):
     with c3:
         target_type = st.selectbox("Type de bien", ["Appartement", "Maison"], index=0)
 
-    st.markdown("#### Affiner les comparables")
+    st.markdown("#### Affiner l’analyse")
     r1, r2, r3, r4 = st.columns(4)
     with r1:
         radius_m = st.select_slider("Rayon", options=[150, 250, 300, 400, 500, 800, 1200], value=500, format_func=lambda x: f"{x} m")
@@ -389,15 +426,6 @@ if run:
 
 result = st.session_state.get("analysis_result")
 if not result:
-    st.markdown('<div class="section-title">Ce que vous obtiendrez</div>', unsafe_allow_html=True)
-    st.markdown('<div class="section-sub">Une seule page à faire défiler, avec l’essentiel visible immédiatement et les réglages experts rangés à part.</div>', unsafe_allow_html=True)
-    p1, p2, p3 = st.columns(3)
-    with p1:
-        st.markdown(empty_card("1 · Marché réel", "Ventes DVF nettoyées, avec priorité au même numéro, à la même rue puis au voisinage."), unsafe_allow_html=True)
-    with p2:
-        st.markdown(empty_card("2 · DPE public", "Rapprochement ADEME avec un niveau de confiance, sans appariement forcé."), unsafe_allow_html=True)
-    with p3:
-        st.markdown(empty_card("3 · Argumentaire", "Fourchette, robustesse, références et limites réunies dans une lecture simple."), unsafe_allow_html=True)
     st.stop()
 
 if result["signature"] != current_signature():
@@ -442,7 +470,8 @@ for text in takeaways:
 
 # DPE
 st.markdown('<div class="section-title">DPE public</div>', unsafe_allow_html=True)
-st.markdown('<div class="section-sub">Le rapprochement est effectué à partir de l’adresse BAN, de la surface et du type de bien. Le DPE n’est pas transformé automatiquement en prime ou décote de prix.</div>', unsafe_allow_html=True)
+with st.popover("ⓘ DPE", use_container_width=False):
+    st.caption("Appariement automatique avec la base ADEME selon l’adresse, la surface et le type de bien. Aucun bonus ou malus de prix n’est appliqué automatiquement.")
 if best_dpe:
     d1, d2 = st.columns([1, 5])
     with d1:
@@ -490,7 +519,6 @@ else:
 
 # Local evidence
 st.markdown('<div class="section-title">Même numéro, même rue, voisinage</div>', unsafe_allow_html=True)
-st.markdown('<div class="section-sub">On commence par les références les plus locales avant d’élargir progressivement.</div>', unsafe_allow_html=True)
 bs = summary["building"]
 ss = summary["street"]
 l1, l2, l3 = st.columns(3)
@@ -562,7 +590,8 @@ else:
 
 # Comparables table
 st.markdown('<div class="section-title">Comparables classés</div>', unsafe_allow_html=True)
-st.markdown('<div class="section-sub">Le score combine proximité, surface, récence, pièces et localisation dans la rue. Il sert à classer les références, pas à certifier une valeur.</div>', unsafe_allow_html=True)
+with st.popover("ⓘ Score des comparables", use_container_width=False):
+    st.caption("Le score classe les ventes selon la proximité, la surface, la récence, les pièces et la localisation. Il ne constitue pas une expertise certifiée.")
 display = comps[[
     "date_mutation", "adresse_complete", "surface_reelle_bati", "nombre_pieces_principales",
     "valeur_fonciere", "prix_m2", "distance_m", "score", "meme_numero", "meme_rue", "vente_simple",
@@ -578,7 +607,6 @@ st.dataframe(display, use_container_width=True, hide_index=True, height=min(650,
 
 # Argumentaire
 st.markdown('<div class="section-title">Argumentaire factuel</div>', unsafe_allow_html=True)
-st.markdown('<div class="section-sub">Le texte ci-dessous distingue volontairement les observations chiffrées des éléments qualitatifs qui ne peuvent pas être valorisés automatiquement.</div>', unsafe_allow_html=True)
 st.text_area("Texte prêt à reprendre", value=argument, height=390, label_visibility="collapsed")
 copy_component(argument)
 
@@ -599,7 +627,7 @@ with st.expander("Méthode, sources et limites", expanded=False):
 
         **Estimation.** Le niveau central est une médiane pondérée par le score. La fourchette correspond aux 25e et 75e percentiles des comparables retenus. Elle décrit l'échantillon observé ; elle n'est pas une expertise immobilière réglementée.
 
-        **DPE.** La base ADEME contient les DPE transmis par les diagnostiqueurs depuis juillet 2021. L'appariement automatique peut être ambigu dans les copropriétés comportant plusieurs logements ou plusieurs diagnostics. C'est pourquoi DVF Scout affiche un niveau de confiance et n'utilise pas le DPE pour créer automatiquement une prime ou une décote.
+        **DPE.** La base ADEME contient les DPE transmis par les diagnostiqueurs depuis juillet 2021. L'appariement automatique peut être ambigu dans les copropriétés comportant plusieurs logements ou plusieurs diagnostics. C'est pourquoi Pythéas affiche un niveau de confiance et n'utilise pas le DPE pour créer automatiquement une prime ou une décote.
 
         **Limites importantes.** DVF ne décrit pas précisément l'étage, la vue, l'état intérieur, la qualité des travaux, l'exposition, l'occupation ou les conditions de négociation.
         """
